@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - Student Portal</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+<nav class="navbar">
+    <a href="/dashboard" class="logo">
+        <span class="logo-badge">SP</span>
+        Student Portal
+    </a>
+
+    <div class="nav-links">
+        <a href="/dashboard" id="dashboardLink" class="active">Dashboard</a>
+        <!-- Intentionally id="profileBtn" to trigger self-healing demonstration -->
+        <a href="/profile" id="profileBtn">Profile</a>
+        <a href="/products" id="productsLink">Products</a>
+        <a href="/settings" id="settingsLink">Settings</a>
+        <a href="/demo" class="nav-runner-btn">Test Runner</a>
+        <a href="/logout" id="logoutLink">Logout</a>
+    </div>
+</nav>
+
+<div class="container">
+
+    <div class="page-header">
+        <h1>Welcome, {{ username }}!</h1>
+        <p>This is the main dashboard of the Student Portal.</p>
+    </div>
+
+    <div class="cards">
+        <div class="card">
+            <div>
+                <h2>Profile</h2>
+                <p>View your student profile and academic details.</p>
+            </div>
+            <a href="/profile" id="viewProfileButton" class="button button-primary">
+                View Profile
+            </a>
+        </div>
+
+        <div class="card">
+            <div>
+                <h2>Products</h2>
+                <p>Browse available student resources and course packages.</p>
+            </div>
+            <a href="/products" id="viewProductsButton" class="button button-primary">
+                View Products
+            </a>
+        </div>
+
+        <div class="card">
+            <div>
+                <h2>Settings</h2>
+                <p>Manage your account settings and preferences.</p>
+            </div>
+            <a href="/settings" id="settingsButton" class="button button-primary">
+                Open Settings
+            </a>
+        </div>
+    </div>
+
+</div>
+
+</body>
+</html>

@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="620" viewBox="0 0 1200 620">
+  <defs>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L0,6 L9,3 z" fill="#334155"/></marker>
+    <style>
+      .box{stroke:#334155;stroke-width:2;rx:14}.title{font:700 22px Arial;fill:#0f172a}.label{font:16px Arial;fill:#0f172a}.small{font:14px Arial;fill:#475569}.line{stroke:#334155;stroke-width:2;fill:none;marker-end:url(#arrow)}
+    </style>
+  </defs>
+  <rect width="1200" height="620" fill="#f8fafc"/>
+  <text x="600" y="42" text-anchor="middle" class="title">Self-Healing Student Portal Architecture</text>
+  <rect x="55" y="110" width="190" height="90" fill="#dbeafe" class="box"/><text x="150" y="148" text-anchor="middle" class="label">User</text><text x="150" y="174" text-anchor="middle" class="small">opens demo runner</text>
+  <rect x="310" y="90" width="235" height="130" fill="#ede9fe" class="box"/><text x="427" y="130" text-anchor="middle" class="label">Flask runner</text><text x="427" y="158" text-anchor="middle" class="small">/api/run-test</text><text x="427" y="184" text-anchor="middle" class="small">telemetry + report</text>
+  <rect x="630" y="90" width="235" height="130" fill="#dcfce7" class="box"/><text x="747" y="130" text-anchor="middle" class="label">Selenium test</text><text x="747" y="158" text-anchor="middle" class="small">portal workflow</text><text x="747" y="184" text-anchor="middle" class="small">expected locators</text>
+  <rect x="950" y="90" width="195" height="130" fill="#fef3c7" class="box"/><text x="1047" y="130" text-anchor="middle" class="label">Student Portal</text><text x="1047" y="158" text-anchor="middle" class="small">Flask + HTML</text><text x="1047" y="184" text-anchor="middle" class="small">live browser DOM</text>
+  <path d="M245 155 H310" class="line"/><path d="M545 155 H630" class="line"/><path d="M865 155 H950" class="line"/>
+  <rect x="310" y="330" width="235" height="145" fill="#fee2e2" class="box"/><text x="427" y="370" text-anchor="middle" class="label">SelfHealing</text><text x="427" y="398" text-anchor="middle" class="small">find_element()</text><text x="427" y="424" text-anchor="middle" class="small">fallback after failure</text><text x="427" y="450" text-anchor="middle" class="small">score candidates</text>
+  <rect x="630" y="330" width="235" height="145" fill="#e0f2fe" class="box"/><text x="747" y="370" text-anchor="middle" class="label">DOM analysis</text><text x="747" y="398" text-anchor="middle" class="small">BeautifulSoup</text><text x="747" y="424" text-anchor="middle" class="small">button / a / input</text><text x="747" y="450" text-anchor="middle" class="small">IDs + visible text</text>
+  <rect x="950" y="330" width="195" height="145" fill="#f0fdf4" class="box"/><text x="1047" y="370" text-anchor="middle" class="label">Recovered action</text><text x="1047" y="398" text-anchor="middle" class="small">By.ID actual ID</text><text x="1047" y="424" text-anchor="middle" class="small">click / continue</text><text x="1047" y="450" text-anchor="middle" class="small">log reason + score</text>
+  <path d="M747 220 V330" class="line"/><path d="M865 402 H950" class="line"/><path d="M950 430 H865" class="line"/><path d="M630 402 H545" class="line"/><path d="M1047 330 V220" class="line"/>
+  <text x="883" y="308" class="small">locator failure</text><text x="883" y="500" class="small">recovered locator</text>
+  <text x="600" y="570" text-anchor="middle" class="small">Normal lookup is attempted first; DOM recovery is used only when the original lookup fails.</text>
+</svg>
+

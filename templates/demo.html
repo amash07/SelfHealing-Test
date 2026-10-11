@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Runner - Self-Healing Demo</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <style>
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 16px;
+            background: var(--bg-surface);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius);
+            overflow: hidden;
+            font-size: 14px;
+        }
+        .comparison-table th, .comparison-table td {
+            padding: 12px 16px;
+            text-align: left;
+            border-bottom: 1px solid var(--border-color);
+        }
+        .comparison-table th {
+            background: #f1f5f9;
+            color: #334155;
+            font-weight: 600;
+        }
+        .comparison-table tr:last-child td {
+            border-bottom: none;
+        }
+        .badge {
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+        .badge-red {
+            background: var(--color-danger-bg);
+            color: var(--color-danger);
+            border: 1px solid var(--color-danger-border);
+        }
+        .badge-green {
+            background: var(--color-success-bg);
+            color: var(--color-success);
+            border: 1px solid var(--color-success-border);
+        }
+    </style>
+</head>
+<body>
+
+<nav class="navbar">
+    <a href="/dashboard" class="logo">
+        <span class="logo-badge">SP</span>
+        Student Portal
+    </a>
+
+    <div class="nav-links">
+        <a href="/dashboard" id="dashboardLink">Dashboard</a>
+        <a href="/profile" id="profileLink">Profile</a>
+        <a href="/products" id="productsLink">Products</a>
+        <a href="/settings" id="settingsLink">Settings</a>
+        <a href="/demo" class="nav-runner-btn active">Test Runner</a>
+        <a href="/logout" id="logoutLink">Logout</a>
+    </div>
+</nav>
+
+<div class="container">
+
+    <div class="page-header">
+        <h1>Automated Test Runner</h1>
+        <p>Run Selenium tests directly on top of your screen to inspect self-healing behavior in real time.</p>
+    </div>
+
+    <!-- Live Execution Status Banner (Positioned right at the top) -->
+    <div id="loadingBanner" style="display: none; margin-bottom: 24px;">
+        <div class="report-header-card" style="border-left: 4px solid var(--brand-blue); background: #ffffff;">
+            <div style="display: flex; align-items: center; gap: 14px;">
+                <div class="pulse-loader"></div>
+                <div>
+                    <h3 id="runningTitle" style="font-size: 16px; font-weight: 700; color: var(--text-main);">Launching Chrome Browser on Top...</h3>
+                    <p id="runningSubtitle" style="font-size: 13px; color: var(--text-muted);">Look at your screen! Chrome will open and navigate through portal pages live...</p>
+                </div>
+            </div>
+            <span class="report-status-badge running">Running Live</span>
+        </div>
+    </div>
+
+    <!-- Execution Report Section (Appears right on top when completed) -->
+    <div id="reportSection" class="report-container" style="margin-bottom: 30px;">
+
+        <div class="report-header-card">
+            <div>
+                <span id="reportBadge" class="report-status-badge">RESULT</span>
+                <h2 id="reportTitle" style="font-size: 18px; font-weight: 700; margin-top: 8px;">Test Complete</h2>
+                <p id="reportSubtext" style="color: var(--text-muted); font-size: 13px; margin-top: 2px;">Summary of test execution.</p>
+            </div>
+
+            <div style="display: flex; gap: 24px;">
+                <div>
+                    <div style="font-size: 12px; color: var(--text-muted);">Duration</div>
+                    <div id="statDuration" style="font-size: 18px; font-weight: 700;">--</div>
+                </div>
+                <div>
+                    <div style="font-size: 12px; color: var(--text-muted);">Healed Elements</div>
+                    <div id="statHealed" style="font-size: 18px; font-weight: 700; color: var(--color-success);">--</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Step By Step List -->
+        <h3 style="font-size: 16px; font-weight: 600; margin-bottom: 12px;">Step-by-Step Test Breakdown</h3>
+        <div id="stepsList" class="steps-list"></div>
+
+        <!-- Terminal Console Output -->
+        <div class="terminal-window">
+            <div class="terminal-titlebar">
+                <span>Console Output</span>
+                <button onclick="copyConsoleLogs()" class="button" style="padding: 2px 8px; font-size: 11px; background: #334155; color: #fff; border-color: #475569;">
+                    Copy Log
+                </button>
+            </div>
+            <pre id="terminalContent" class="terminal-content">Waiting for test run...</pre>
+        </div>
+
+    </div>
+
+    <!-- Options Toolbar -->
+    <div class="runner-options-bar">
+        <label class="checkbox-label">
+            <input type="checkbox" id="visibleBrowserCheck" checked>
+            <span><strong>Open visible Chrome window on top</strong> (uncheck for silent background run)</span>
+        </label>
+        <div style="font-size: 13px; color: var(--text-muted);">
+            Target: <code>http://127.0.0.1:5000</code>
+        </div>
+    </div>
+
+    <!-- Dual Action Triggers -->
+    <div class="runner-grid">
+
+        <!-- Card 1: Without Healing -->
+        <div class="test-trigger-card without-healing">
+            <div>
+                <div class="trigger-header">
+                    <div>
+                        <h2 style="font-size: 17px; font-weight: 700;">1. Test Without Healing</h2>
+                        <p style="font-size: 13px; color: var(--text-muted); margin-top: 2px;">Standard Selenium test</p>
+                    </div>
+                    <span class="trigger-badge fail">Fails</span>
+                </div>
+
+                <p style="font-size: 14px; color: var(--text-muted); margin-bottom: 20px;">
+                    Looks for ID <code>loginButton</code>. Fails immediately because the portal button has ID <code>loginBtn</code>.
+                </p>
+            </div>
+
+            <button id="runWithoutHealingBtn" class="trigger-btn red" onclick="triggerTest('without_healing')">
+                Run Without Healing (See Failure)
+            </button>
+        </div>
+
+        <!-- Card 2: With Healing -->
+        <div class="test-trigger-card with-healing">
+            <div>
+                <div class="trigger-header">
+                    <div>
+                        <h2 style="font-size: 17px; font-weight: 700;">2. Test With Self-Healing</h2>
+                        <p style="font-size: 13px; color: var(--text-muted); margin-top: 2px;">Self-healing enabled</p>
+                    </div>
+                    <span class="trigger-badge heal">Passes</span>
+                </div>
+
+                <p style="font-size: 14px; color: var(--text-muted); margin-bottom: 20px;">
+                    When <code>loginButton</code> fails, the healer inspects the page DOM, finds <code>loginBtn</code>, recovers the locator, and passes all tests.
+                </p>
+            </div>
+
+            <button id="runWithHealingBtn" class="trigger-btn green" onclick="triggerTest('with_healing')">
+                Run With Self-Healing (See Recovery)
+            </button>
+        </div>
+
+    </div>
+
+    <!-- Comparison Table -->
+    <div style="margin-top: 40px;">
+        <h2 style="font-size: 17px; font-weight: 700; margin-bottom: 4px;">Comparison Overview</h2>
+        <p style="font-size: 14px; color: var(--text-muted);">How traditional Selenium compares to the Self-Healing engine when locators change:</p>
+
+        <table class="comparison-table">
+            <thead>
+                <tr>
+                    <th>Feature</th>
+                    <th>Without Healing (`test_without_healing.py`)</th>
+                    <th>With Self-Healing (`test_student_portal.py`)</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>Missing ID Handling</strong></td>
+                    <td><span class="badge badge-red">Fails (NoSuchElementException)</span></td>
+                    <td><span class="badge badge-green">Recovers via DOM matching</span></td>
+                </tr>
+                <tr>
+                    <td><strong>Changed Locator (`loginButton` → `loginBtn`)</strong></td>
+                    <td>Fails at Step 1</td>
+                    <td>Healed and continues to next steps</td>
+                </tr>
+                <tr>
+                    <td><strong>Overall Test Status</strong></td>
+                    <td><span class="badge badge-red">Failed</span></td>
+                    <td><span class="badge badge-green">Passed</span></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+</div>
+
+<script>
+    let isRunning = false;
+
+    async function triggerTest(mode) {
+        if (isRunning) return;
+
+        isRunning = true;
+        const withoutBtn = document.getElementById('runWithoutHealingBtn');
+        const withBtn = document.getElementById('runWithHealingBtn');
+        const loadingBanner = document.getElementById('loadingBanner');
+        const reportSection = document.getElementById('reportSection');
+        const runningTitle = document.getElementById('runningTitle');
+        const runningSubtitle = document.getElementById('runningSubtitle');
+        const isHeadless = !document.getElementById('visibleBrowserCheck').checked;
+
+        withoutBtn.disabled = true;
+        withBtn.disabled = true;
+        loadingBanner.style.display = 'block';
+        reportSection.style.display = 'none';
+
+        // Scroll to top so user sees the progress right on top
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+
+        if (mode === 'without_healing') {
+            runningTitle.textContent = 'Chrome Opening on Top: Running Test Without Healing...';
+            runningSubtitle.textContent = 'Watch your screen! Chrome will type credentials and crash on modified loginButton ID...';
+        } else {
+            runningTitle.textContent = 'Chrome Opening on Top: Running Self-Healing Test...';
+            runningSubtitle.textContent = 'Watch your screen! Chrome will navigate and dynamically heal changed locators live...';
+        }
+
+        try {
+            const response = await fetch('/api/run-test', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ mode: mode, headless: isHeadless })
+            });
+
+            const data = await response.json();
+            renderReport(data, mode);
+        } catch (err) {
+            alert('Error running test: ' + err.message);
+        } finally {
+            isRunning = false;
+            withoutBtn.disabled = false;
+            withBtn.disabled = false;
+            loadingBanner.style.display = 'none';
+        }
+    }
+
+    function renderReport(data, mode) {
+        const reportSection = document.getElementById('reportSection');
+        const reportBadge = document.getElementById('reportBadge');
+        const reportTitle = document.getElementById('reportTitle');
+        const reportSubtext = document.getElementById('reportSubtext');
+        const statDuration = document.getElementById('statDuration');
+        const statHealed = document.getElementById('statHealed');
+        const stepsList = document.getElementById('stepsList');
+        const terminalContent = document.getElementById('terminalContent');
+
+        reportSection.style.display = 'block';
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+
+        statDuration.textContent = (data.duration || 0).toFixed(2) + 's';
+        statHealed.textContent = data.healed_count;
+
+        terminalContent.textContent = data.raw_output || 'No output captured.';
+        terminalContent.scrollTop = terminalContent.scrollHeight;
+
+        if (data.status === 'PASSED') {
+            reportBadge.className = 'report-status-badge passed';
+            reportBadge.textContent = 'PASSED';
+            reportTitle.textContent = 'All Tests Passed with Self-Healing';
+            reportSubtext.textContent = `All test cases succeeded. ${data.healed_count} modified locators were automatically recovered.`;
+        } else {
+            reportBadge.className = 'report-status-badge failed';
+            reportBadge.textContent = 'FAILED';
+            reportTitle.textContent = 'Test Failed (NoSuchElementException)';
+            reportSubtext.textContent = 'Standard test failed because an element ID was modified on the website.';
+        }
+
+        // Render Step Cards
+        stepsList.innerHTML = '';
+        const allStepNames = [
+            'TEST 1: Login',
+            'TEST 2: Dashboard',
+            'TEST 3: Profile',
+            'TEST 4: Products',
+            'TEST 5: Settings',
+            'TEST 6: Logout'
+        ];
+
+        if (data.steps && data.steps.length > 0) {
+            const executedStepNames = new Set(data.steps.map(s => s.name));
+
+            data.steps.forEach((step) => {
+                const card = document.createElement('div');
+                card.className = `step-card ${step.status}`;
+
+                let indicatorClass = step.status === 'passed' ? (step.healed ? 'healed' : 'passed') : 'failed';
+                let indicatorIcon = step.status === 'passed' ? (step.healed ? '🛡️' : '✓') : '✗';
+
+                let healingHtml = '';
+                if (step.healed) {
+                    healingHtml = `
+                        <div style="margin-top: 6px; font-size: 13px; color: var(--text-muted);">
+                            <span class="healing-pill">Healed</span>
+                            <span style="margin-left: 6px;"><code>${step.original_locator || 'N/A'}</code> → <code>${step.recovered_locator || 'N/A'}</code></span>
+                            ${step.score ? `<span style="margin-left: 6px; color: #0284c7;">(Score: ${step.score})</span>` : ''}
+                        </div>
+                    `;
+                }
+
+                card.innerHTML = `
+                    <div style="flex-grow: 1;">
+                        <div class="step-left">
+                            <div class="step-indicator ${indicatorClass}">
+                                ${indicatorIcon}
+                            </div>
+                            <div>
+                                <strong>${step.name}</strong>
+                                <span style="font-size: 12px; margin-left: 8px; color: var(--text-muted); text-transform: uppercase;">${step.status}</span>
+                            </div>
+                        </div>
+                        ${healingHtml}
+                        ${step.error ? `<div style="margin-top: 6px; font-size: 12px; color: var(--color-danger);">${step.error}</div>` : ''}
+                    </div>
+                `;
+                stepsList.appendChild(card);
+            });
+
+            // Show skipped steps if early failure
+            if (data.status === 'FAILED') {
+                allStepNames.forEach(name => {
+                    if (!executedStepNames.has(name)) {
+                        const card = document.createElement('div');
+                        card.className = 'step-card';
+                        card.style.opacity = '0.5';
+                        card.innerHTML = `
+                            <div style="flex-grow: 1;">
+                                <div class="step-left">
+                                    <div class="step-indicator" style="background: #e2e8f0; color: #64748b;">-</div>
+                                    <div>
+                                        <span style="color: var(--text-muted); font-weight: 600;">${name}</span>
+                                        <span style="font-size: 12px; margin-left: 8px; color: var(--text-muted);">SKIPPED</span>
+                                    </div>
+                                </div>
+                            </div>
+                        `;
+                        stepsList.appendChild(card);
+                    }
+                });
+            }
+        }
+    }
+
+    function copyConsoleLogs() {
+        const text = document.getElementById('terminalContent').textContent;
+        navigator.clipboard.writeText(text).then(() => {
+            alert('Logs copied to clipboard');
+        });
+    }
+</script>
+
+</body>
+</html>

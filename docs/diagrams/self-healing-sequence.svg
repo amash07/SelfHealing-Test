@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="700" viewBox="0 0 1200 700">
+  <defs>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L0,6 L9,3 z" fill="#334155"/></marker>
+    <style>.head{font:700 22px Arial;fill:#0f172a}.actor{font:700 15px Arial;fill:#0f172a}.txt{font:14px Arial;fill:#334155}.life{stroke:#94a3b8;stroke-width:2;stroke-dasharray:7 7}.msg{stroke:#334155;stroke-width:2;fill:none;marker-end:url(#arrow)}.fail{stroke:#dc2626;stroke-width:2;fill:none;marker-end:url(#arrow)}.recover{stroke:#16a34a;stroke-width:2;fill:none;marker-end:url(#arrow)}</style>
+  </defs>
+  <rect width="1200" height="700" fill="#f8fafc"/>
+  <text x="600" y="38" text-anchor="middle" class="head">Locator Recovery Sequence</text>
+  <g>
+    <rect x="80" y="75" width="170" height="50" rx="10" fill="#dcfce7" stroke="#334155" stroke-width="2"/><text x="165" y="106" text-anchor="middle" class="actor">Selenium test</text>
+    <rect x="340" y="75" width="170" height="50" rx="10" fill="#fee2e2" stroke="#334155" stroke-width="2"/><text x="425" y="106" text-anchor="middle" class="actor">SelfHealing</text>
+    <rect x="600" y="75" width="170" height="50" rx="10" fill="#dbeafe" stroke="#334155" stroke-width="2"/><text x="685" y="106" text-anchor="middle" class="actor">WebDriver</text>
+    <rect x="860" y="75" width="170" height="50" rx="10" fill="#fef3c7" stroke="#334155" stroke-width="2"/><text x="945" y="106" text-anchor="middle" class="actor">Browser DOM</text>
+  </g>
+  <path d="M165 125 V650 M425 125 V650 M685 125 V650 M945 125 V650" class="life"/>
+  <path d="M165 165 H425" class="msg"/><text x="295" y="155" text-anchor="middle" class="txt">find_element(loginButton)</text>
+  <path d="M425 210 H685" class="msg"/><text x="555" y="200" text-anchor="middle" class="txt">try original ID</text>
+  <path d="M685 250 H425" class="fail"/><text x="555" y="240" text-anchor="middle" class="txt">NoSuchElement failure</text>
+  <path d="M425 300 H945" class="msg"/><text x="685" y="290" text-anchor="middle" class="txt">read page_source</text>
+  <path d="M945 340 H425" class="msg"/><text x="685" y="330" text-anchor="middle" class="txt">HTML: id = loginBtn</text>
+  <rect x="350" y="370" width="150" height="55" rx="10" fill="#f1f5f9" stroke="#64748b" stroke-width="2"/><text x="425" y="393" text-anchor="middle" class="txt">normalize IDs</text><text x="425" y="412" text-anchor="middle" class="txt">score candidates</text>
+  <path d="M425 465 H685" class="recover"/><text x="555" y="455" text-anchor="middle" class="txt">find_element(loginBtn)</text>
+  <path d="M685 505 H425" class="recover"/><text x="555" y="495" text-anchor="middle" class="txt">element returned</text>
+  <path d="M425 550 H165" class="recover"/><text x="295" y="540" text-anchor="middle" class="txt">recovered element</text>
+  <path d="M165 595 H685" class="msg"/><text x="425" y="585" text-anchor="middle" class="txt">click and continue workflow</text>
+  <text x="600" y="665" text-anchor="middle" class="txt">Red = failure detection; green = successful recovery.</text>
+</svg>
+

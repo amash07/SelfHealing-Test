@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Products - Student Portal</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+<nav class="navbar">
+    <a href="/dashboard" class="logo">
+        <span class="logo-badge">SP</span>
+        Student Portal
+    </a>
+
+    <div class="nav-links">
+        <a href="/dashboard" id="dashboardLink">Dashboard</a>
+        <a href="/profile" id="profileLink">Profile</a>
+        <a href="/products" id="productsLink" class="active">Products</a>
+        <!-- Intentionally id="settingsbtn" to trigger self-healing demonstration -->
+        <a href="/settings" id="settingsbtn">Settings</a>
+        <a href="/demo" class="nav-runner-btn">Test Runner</a>
+        <a href="/logout" id="logoutLink">Logout</a>
+    </div>
+</nav>
+
+<div class="container">
+
+    <div class="page-header">
+        <h1>Products</h1>
+        <p>Available resources and packages</p>
+    </div>
+
+    <div class="cards">
+        <div class="card">
+            <div>
+                <h2>Product A</h2>
+                <p>Student productivity tool</p>
+            </div>
+            <button id="productAButton" class="button">
+                Select
+            </button>
+        </div>
+
+        <div class="card">
+            <div>
+                <h2>Product B</h2>
+                <p>Learning resource package</p>
+            </div>
+            <button id="productBButton" class="button">
+                Select
+            </button>
+        </div>
+
+        <div class="card">
+            <div>
+                <h2>Product C</h2>
+                <p>Interview preparation package</p>
+            </div>
+            <button id="productCButton" class="button">
+                Select
+            </button>
+        </div>
+    </div>
+
+</div>
+
+</body>
+</html>

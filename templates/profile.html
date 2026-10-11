@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile - Student Portal</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+<nav class="navbar">
+    <a href="/dashboard" class="logo">
+        <span class="logo-badge">SP</span>
+        Student Portal
+    </a>
+
+    <div class="nav-links">
+        <a href="/dashboard" id="dashboardLink">Dashboard</a>
+        <a href="/profile" id="profileLink" class="active">Profile</a>
+        <a href="/products" id="productsLink">Products</a>
+        <a href="/settings" id="settingsLink">Settings</a>
+        <a href="/demo" class="nav-runner-btn">Test Runner</a>
+        <a href="/logout" id="logoutLink">Logout</a>
+    </div>
+</nav>
+
+<div class="container">
+
+    <div class="page-header">
+        <h1>Student Profile</h1>
+        <p>Your student profile information</p>
+    </div>
+
+    <div class="profile-card">
+        <div class="profile-detail-grid">
+            <div class="detail-item">
+                <span>Username</span>
+                <span>{{ username }}</span>
+            </div>
+            <div class="detail-item">
+                <span>Department</span>
+                <span>Information Technology</span>
+            </div>
+            <div class="detail-item">
+                <span>Status</span>
+                <span style="color: var(--color-success); font-weight: 600;">Active</span>
+            </div>
+        </div>
+
+        <div style="margin-top: 20px;">
+            <a href="/dashboard" class="button">
+                Back to Dashboard
+            </a>
+        </div>
+    </div>
+
+</div>
+
+</body>
+</html>

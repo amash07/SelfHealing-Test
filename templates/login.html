@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Portal - Login</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+<nav class="navbar">
+    <a href="/" class="logo">
+        <span class="logo-badge">SP</span>
+        Student Portal
+    </a>
+    <div class="nav-links">
+        <a href="/demo" class="nav-runner-btn">Test Runner</a>
+    </div>
+</nav>
+
+<div class="login-container">
+    <div class="login-box">
+        <h1>Student Portal</h1>
+        <p class="subtitle">Please sign in to access your portal</p>
+
+        {% if error %}
+            <div class="error-message">
+                {{ error }}
+            </div>
+        {% endif %}
+
+        <form method="POST" action="/login">
+            <label for="username">Username</label>
+            <input
+                type="text"
+                id="username"
+                name="username"
+                placeholder="Enter username"
+                required
+                autocomplete="username"
+            >
+
+            <label for="password">Password</label>
+            <input
+                type="password"
+                id="password"
+                name="password"
+                placeholder="Enter password"
+                required
+                autocomplete="current-password"
+            >
+
+            <!-- Original ID loginBtn kept for Self-Healing demonstration -->
+            <button
+                type="submit"
+                id="loginBtn"
+                name="login"
+            >
+                Login
+            </button>
+        </form>
+
+        <div class="demo">
+            Demo credentials: <code>admin</code> / <code>admin123</code>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

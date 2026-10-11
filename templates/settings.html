@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Settings - Student Portal</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+<nav class="navbar">
+    <a href="/dashboard" class="logo">
+        <span class="logo-badge">SP</span>
+        Student Portal
+    </a>
+
+    <div class="nav-links">
+        <a href="/dashboard" id="dashboardLink">Dashboard</a>
+        <a href="/profile" id="profileLink">Profile</a>
+        <a href="/products" id="productsLink">Products</a>
+        <a href="/settings" id="settingsLink" class="active">Settings</a>
+        <a href="/demo" class="nav-runner-btn">Test Runner</a>
+        <a href="/logout" id="logoutLink">Logout</a>
+    </div>
+</nav>
+
+<div class="container">
+
+    <div class="page-header">
+        <h1>Settings</h1>
+        <p>Manage your account settings</p>
+    </div>
+
+    <div class="settings-card">
+        <div class="profile-detail-grid">
+            <div class="detail-item">
+                <span>Account Status</span>
+                <span>Active</span>
+            </div>
+            <div class="detail-item">
+                <span>Portal Mode</span>
+                <span>Student</span>
+            </div>
+            <div class="detail-item">
+                <span>Self-Healing Engine</span>
+                <span style="color: var(--color-success); font-weight: 600;">Enabled</span>
+            </div>
+        </div>
+
+        <div style="margin-top: 20px;">
+            <a href="/dashboard" class="button">
+                Back to Dashboard
+            </a>
+        </div>
+    </div>
+
+</div>
+
+</body>
+</html>
